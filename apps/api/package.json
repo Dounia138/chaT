@@ -1,0 +1,37 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./src/*"
+      ]
+    }
+  },
+  "scripts": {
+    "start": "node --loader=tsimp/loader ./src/index.ts",
+    "dev": "node --loader=tsimp/loader --watch ./src/index.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@trpc/server": "^10.44.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@chat/eslint-config": "*",
+    "@chat/typescript-config": "*",
+    "tsimp": "^2.0.10"
+  }
+}

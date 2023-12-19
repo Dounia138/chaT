@@ -1,0 +1,14 @@
+{
+  "extends": ["expo/tsconfig.base", "@chat/typescript-config/base.json"],
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "exactOptionalPropertyTypes": false,
+    "paths": {
+      "~/*": [
+        "src/*"
+      ]
+    }
+  },
+  "exclude": ["./tamagui.config.ts"]
+}
