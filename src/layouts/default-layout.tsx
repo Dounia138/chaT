@@ -12,8 +12,11 @@ export const DefaultLayout = (props: DefaultLayoutProps) => {
       paddingTop={safeAreaInsets.top}
       paddingBottom={safeAreaInsets.bottom}
       paddingHorizontal="$5"
+      flex={1}
     >
-      <ScrollView>{props.children}</ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        {props.children}
+      </ScrollView>
     </Box>
   );
 };
