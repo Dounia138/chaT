@@ -8,50 +8,39 @@ import {
   InputSlot,
   VStack,
 } from "@gluestack-ui/themed";
-import { UserIcon, MailIcon, KeyIcon, LogInIcon } from "lucide-react-native";
+import { MailIcon, KeyIcon, LogInIcon } from "lucide-react-native";
 import { useEffect, useReducer } from "react";
 
-import { useSignup } from "./hooks/use-signup";
-import { SignupData } from "./types/signup-data";
+import { useLogin } from "./hooks/use-login";
+import { LoginData } from "./types/login-data";
 import { DefaultLayout } from "../../layouts/default-layout";
 import { useNavigation } from "../../shared/hooks/use-navigation";
 
-export const SignupScreen = () => {
+export const LoginScreen = () => {
   const navigation = useNavigation();
 
   const [identifiers, setIdentifiers] = useReducer(
-    (state: SignupData, newState: Partial<SignupData>) => ({
+    (state: LoginData, newState: Partial<LoginData>) => ({
       ...state,
       ...newState,
     }),
     {
       email: "",
       password: "",
-      name: "",
     },
   );
 
-  const signup = useSignup();
+  const login = useLogin();
 
   useEffect(() => {
-    if (signup.isSuccess) {
+    if (login.isSuccess) {
       navigation.replace("home");
     }
-  }, [signup.isSuccess]);
+  }, [login.isSuccess]);
 
   return (
     <DefaultLayout>
       <VStack space="md" justifyContent="center" height="100%">
-        <Input variant="outline" size="md">
-          <InputField
-            placeholder="Name"
-            onChangeText={(text) => setIdentifiers({ name: text })}
-          />
-          <InputSlot paddingRight="$1.5">
-            <InputIcon as={UserIcon} />
-          </InputSlot>
-        </Input>
-
         <Input variant="outline" size="md">
           <InputField
             placeholder="Email"
@@ -80,18 +69,18 @@ export const SignupScreen = () => {
         <Button
           variant="solid"
           size="md"
-          onPress={() => signup.mutate(identifiers)}
+          onPress={() => login.mutate(identifiers)}
         >
-          <ButtonText>Signup </ButtonText>
+          <ButtonText>Login </ButtonText>
           <ButtonIcon as={LogInIcon} />
         </Button>
 
         <Button
           variant="link"
           size="md"
-          onPress={() => navigation.replace("login")}
+          onPress={() => navigation.replace("signup")}
         >
-          <ButtonText>Already have an account? Login</ButtonText>
+          <ButtonText>Don't have an account? Signup</ButtonText>
         </Button>
       </VStack>
     </DefaultLayout>

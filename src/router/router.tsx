@@ -1,10 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { HomeScreen } from "../pages/home/home-screen";
+import { LoginScreen } from "../pages/login/login-screen";
 import { SignupScreen } from "../pages/signup/signup-screen";
 
 export type RootStackParamList = {
   signup: undefined;
+  login: undefined;
   home: undefined;
 };
 
@@ -18,6 +20,7 @@ export const Navigator = () => {
       }}
     >
       <Stack.Screen name="signup" component={SignupScreen} />
+      <Stack.Screen name="login" component={LoginScreen} />
       <Stack.Screen name="home" component={HomeScreen} />
     </Stack.Navigator>
   );
