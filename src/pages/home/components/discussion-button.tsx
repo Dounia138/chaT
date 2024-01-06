@@ -1,10 +1,9 @@
 import { Text } from "@gluestack-ui/themed";
-import { useQuery } from "@tanstack/react-query";
 import { TouchableOpacity } from "react-native";
 
+import { useNavigation } from "../../../shared/hooks/use-navigation";
+import { useUsername } from "../../../shared/hooks/use-username";
 import { Message } from "../types/message";
-
-// import { useCurrentUser } from "../../../shared/hooks/use-current-user";
 
 interface DiscussionButtonProps {
   userId: string;
@@ -15,14 +14,9 @@ export const DiscussionButton = ({
   userId,
   messages,
 }: DiscussionButtonProps) => {
-  // const currentUser = useCurrentUser();
+  const navigation = useNavigation();
 
-  const usernameToDisplay = useQuery<any>({
-    queryKey: ["users", userId],
-    // We called `useUsernames` in `src/pages/home/home-screen.tsx` so we can
-    // omit the `queryFn` here. `usernameToDisplay` will be populated by
-    // the cache.
-  });
+  const username = useUsername(userId);
 
   const lastMessage = messages.at(-1);
   const lastMessageDate = lastMessage?.created_at
@@ -32,10 +26,10 @@ export const DiscussionButton = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        console.log("Discussion button pressed");
+        navigation.navigate("discussion", { receiverId: userId });
       }}
     >
-      <Text>{usernameToDisplay.data?.username}</Text>
+      <Text>{username.data?.username}</Text>
       <Text>{lastMessage?.message}</Text>
       <Text>
         {lastMessageDate?.getHours().toString().padStart(2, "0")}:
