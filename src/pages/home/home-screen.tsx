@@ -2,22 +2,20 @@ import { Button, ButtonIcon, ButtonText, VStack } from "@gluestack-ui/themed";
 import { MessageCirclePlusIcon } from "lucide-react-native";
 
 import { DiscussionButton } from "./components/discussion-button";
-import { useDiscussions } from "./hooks/use-discussions";
-import { useMessages } from "./hooks/use-messages";
 import { useUsernames } from "./hooks/use-usernames";
 import { DefaultLayout } from "../../layouts/default-layout";
 import { useCurrentUser } from "../../shared/hooks/use-current-user";
+import { useDiscussions } from "../../shared/hooks/use-discussions";
 
 export const HomeScreen = () => {
   const currentUser = useCurrentUser();
 
-  const messages = useMessages(currentUser.data?.id);
-  useUsernames(
-    messages.data?.flatMap((message) => [message.user1_id, message.user2_id]) ??
-      [],
-  );
+  const discussions = useDiscussions(currentUser.data?.id);
 
-  const discussions = useDiscussions(messages.data ?? []);
+  const allUserIds = Array.from(discussions?.entries() ?? []).flatMap(
+    ([userId, messages]) => [userId, ...messages.map((m) => m.id)],
+  );
+  useUsernames(allUserIds);
 
   return (
     <DefaultLayout>
