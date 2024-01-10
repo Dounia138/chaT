@@ -38,9 +38,9 @@ const useGroupMessagesToDiscussions = (messages: Message[]) => {
   const discussions = useMemo(() => {
     return messages.reduce<Map<string, Message[]>>((acc, message) => {
       const key =
-        message.user1_id === currentUser.data?.id
-          ? message.user2_id
-          : message.user1_id;
+        message.from_user_id === currentUser.data?.id
+          ? message.to_user_id
+          : message.from_user_id;
 
       if (acc.has(key)) {
         return acc.set(key, [...(acc.get(key) ?? []), message]);
@@ -61,7 +61,7 @@ const getMessages = (userId: string) => {
   return supabase
     .from("messages")
     .select("*")
-    .or(`user1_id.eq."${userId}",user2_id.eq."${userId}"`)
+    .or(`from_user_id.eq."${userId}",to_user_id.eq."${userId}"`)
     .then((res) => {
       if (res.error) {
         throw new Error(res.error.message);

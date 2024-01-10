@@ -6,7 +6,7 @@ import { supabase } from "../../../shared/utils/supabase/supabase";
 const sendMessage = (message: string, senderId: string, receiverId: string) => {
   return supabase
     .from("messages")
-    .insert([{ message, user1_id: senderId, user2_id: receiverId }])
+    .insert([{ message, from_user_id: senderId, to_user_id: receiverId }])
     .then((res) => {
       if (res.error) {
         throw new Error(res.error.message);

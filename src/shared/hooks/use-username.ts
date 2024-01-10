@@ -4,7 +4,7 @@ import { supabase } from "../utils/supabase/supabase";
 
 const getUsername = (userId: string) => {
   return supabase
-    .from("usernames_view")
+    .from("users_view")
     .select("*")
     .eq("id", userId)
     .then((res) => {

@@ -11,7 +11,7 @@ interface MessageProps {
 export const Message = ({ message }: MessageProps) => {
   const currentUser = useCurrentUser();
 
-  const senderId = message.user1_id;
+  const senderId = message.from_user_id;
 
   const username = useUsername(senderId);
 
