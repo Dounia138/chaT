@@ -29,12 +29,14 @@ export const DiscussionButton = ({
         navigation.navigate("discussion", { receiverId: userId });
       }}
     >
-      <Text>{username.data?.username}</Text>
+      <Text>{username.data?.name}</Text>
       <Text>{lastMessage?.message}</Text>
-      <Text>
-        {lastMessageDate?.getHours().toString().padStart(2, "0")}:
-        {lastMessageDate?.getMinutes().toString().padStart(2, "0")}
-      </Text>
+      {lastMessageDate && (
+        <Text>
+          {lastMessageDate?.getHours().toString().padStart(2, "0")}:
+          {lastMessageDate?.getMinutes().toString().padStart(2, "0")}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };

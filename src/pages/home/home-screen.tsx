@@ -6,8 +6,11 @@ import { useUsernames } from "./hooks/use-usernames";
 import { DefaultLayout } from "../../layouts/default-layout";
 import { useCurrentUser } from "../../shared/hooks/use-current-user";
 import { useDiscussions } from "../../shared/hooks/use-discussions";
+import { useNavigation } from "../../shared/hooks/use-navigation";
 
 export const HomeScreen = () => {
+  const navigation = useNavigation();
+
   const currentUser = useCurrentUser();
 
   const discussions = useDiscussions(currentUser.data?.id);
@@ -20,7 +23,12 @@ export const HomeScreen = () => {
   return (
     <DefaultLayout>
       <VStack>
-        <Button variant="solid" onPress={() => {}}>
+        <Button
+          variant="solid"
+          onPress={() => {
+            navigation.navigate("newDiscussion");
+          }}
+        >
           <ButtonIcon as={MessageCirclePlusIcon} marginRight="$3" />
           <ButtonText>Start a new conversation</ButtonText>
         </Button>

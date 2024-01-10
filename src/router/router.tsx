@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { DiscussionScreen } from "../pages/discussion/discussion-screen";
 import { HomeScreen } from "../pages/home/home-screen";
 import { LoginScreen } from "../pages/login/login-screen";
+import { NewDiscussionScreen } from "../pages/new-discussion/new-discussion-screen";
 import { SignupScreen } from "../pages/signup/signup-screen";
 
 export type RootStackParamList = {
@@ -10,6 +11,7 @@ export type RootStackParamList = {
   login: undefined;
   home: undefined;
   discussion: { receiverId: string };
+  newDiscussion: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -25,6 +27,7 @@ export const Navigator = () => {
       <Stack.Screen name="login" component={LoginScreen} />
       <Stack.Screen name="home" component={HomeScreen} />
       <Stack.Screen name="discussion" component={DiscussionScreen} />
+      <Stack.Screen name="newDiscussion" component={NewDiscussionScreen} />
     </Stack.Navigator>
   );
 };
