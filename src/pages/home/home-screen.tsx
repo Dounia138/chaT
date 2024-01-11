@@ -33,15 +33,29 @@ export const HomeScreen = () => {
           <ButtonText>Start a new conversation</ButtonText>
         </Button>
 
-        {Array.from(discussions?.entries() ?? []).map(([userId, messages]) => {
-          return (
-            <DiscussionButton
-              key={userId}
-              messages={messages}
-              userId={userId}
-            />
-          );
-        })}
+        {Array.from(discussions?.entries() ?? [])
+          .sort(([, messagesA], [, messagesB]) => {
+            const lastMessageA = messagesA.at(-1);
+            const lastMessageB = messagesB.at(-1);
+
+            if (!lastMessageA || !lastMessageB) {
+              return 0;
+            }
+
+            const lastMessageDateA = new Date(lastMessageA.created_at);
+            const lastMessageDateB = new Date(lastMessageB.created_at);
+
+            return lastMessageDateB.getTime() - lastMessageDateA.getTime();
+          })
+          .map(([userId, messages]) => {
+            return (
+              <DiscussionButton
+                key={userId}
+                messages={messages}
+                userId={userId}
+              />
+            );
+          })}
       </VStack>
     </DefaultLayout>
   );
