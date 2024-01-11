@@ -18,16 +18,36 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const Navigator = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="signup" component={SignupScreen} />
-      <Stack.Screen name="login" component={LoginScreen} />
-      <Stack.Screen name="home" component={HomeScreen} />
-      <Stack.Screen name="discussion" component={DiscussionScreen} />
-      <Stack.Screen name="newDiscussion" component={NewDiscussionScreen} />
+    <Stack.Navigator>
+      <Stack.Group
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="signup" component={SignupScreen} />
+        <Stack.Screen name="login" component={LoginScreen} />
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          headerShown: true,
+        }}
+      >
+        <Stack.Screen
+          name="home"
+          component={HomeScreen}
+          options={{
+            title: "Your conversations",
+          }}
+        />
+        <Stack.Screen name="discussion" component={DiscussionScreen} />
+        <Stack.Screen
+          name="newDiscussion"
+          component={NewDiscussionScreen}
+          options={{
+            title: "New Discussion",
+          }}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };
