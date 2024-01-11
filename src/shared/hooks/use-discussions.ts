@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useReducer } from "react";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 
 import { useCurrentUser } from "./use-current-user";
 import { Message } from "../../pages/home/types/message";
@@ -7,7 +7,14 @@ import { supabase } from "../utils/supabase/supabase";
 
 const useListenToMessages = (
   userId: string | undefined,
-  callback: (data: Message) => void,
+  // callback: (data: Message) => void,
+  {
+    callbackInsert,
+    callbackDelete,
+  }: {
+    callbackInsert: (data: Message) => void;
+    callbackDelete: (data: { id: number }) => void;
+  },
 ) => {
   useEffect(() => {
     if (!userId) {
@@ -20,7 +27,14 @@ const useListenToMessages = (
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages" },
         (payload) => {
-          callback(payload.new as Message);
+          callbackInsert(payload.new as Message);
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "messages" },
+        (payload) => {
+          callbackDelete(payload.old as { id: number });
         },
       )
       .subscribe();
@@ -28,7 +42,7 @@ const useListenToMessages = (
     return () => {
       subscription.unsubscribe();
     };
-  }, [userId, callback]);
+  }, [userId, callbackInsert, callbackDelete]);
 };
 
 const useGroupMessagesToDiscussions = (messages: Message[]) => {
@@ -86,12 +100,34 @@ export const useMessages = (userId: string | undefined) => {
 
 export const useDiscussions = (userId: string | undefined) => {
   // Create a store of messages
-  const [messages, setMessages] = useReducer(
-    (prev: Message[], next: Message[]) => {
-      return [...prev, ...next].filter(
-        (message, index, self) =>
-          index === self.findIndex((m) => m.id === message.id),
-      );
+  // const [messages, setMessages] = useReducer(
+  //   (prev: Message[], next: Message[]) => {
+  //     return [...prev, ...next].filter(
+  //       (message, index, self) =>
+  //         index === self.findIndex((m) => m.id === message.id),
+  //     );
+  //   },
+  //   [],
+  // );
+  const [messages, dispatchMessages] = useReducer(
+    (
+      prev: Message[],
+      next:
+        | { type: "insert"; payload: Message[] }
+        | { type: "delete"; payload: { id: number } },
+    ) => {
+      if (next.type === "insert") {
+        return [...prev, ...next.payload].filter(
+          (message, index, self) =>
+            index === self.findIndex((m) => m.id === message.id),
+        );
+      }
+
+      if (next.type === "delete") {
+        return prev.filter((message) => message.id !== next.payload.id);
+      }
+
+      return prev;
     },
     [],
   );
@@ -100,15 +136,41 @@ export const useDiscussions = (userId: string | undefined) => {
   const messagesQuery = useMessages(userId);
   useEffect(() => {
     if (messagesQuery.data) {
-      setMessages(messagesQuery.data);
+      dispatchMessages({
+        type: "insert",
+        payload: messagesQuery.data,
+      });
     }
   }, [messagesQuery.data]);
 
+  const addMessage = useCallback(
+    (message: Message) => {
+      dispatchMessages({
+        type: "insert",
+        payload: [message],
+      });
+    },
+    [dispatchMessages],
+  );
+
+  const deleteMessage = useCallback(
+    (message: { id: number }) => {
+      dispatchMessages({
+        type: "delete",
+        payload: message,
+      });
+    },
+    [dispatchMessages],
+  );
+
   // Listen to new messages
-  useListenToMessages(userId, (data) => {
-    setMessages([data]);
+  useListenToMessages(userId, {
+    callbackInsert: addMessage,
+    callbackDelete: deleteMessage,
   });
 
   // Group messages to discussions
-  return useGroupMessagesToDiscussions(messages);
+  const discussions = useGroupMessagesToDiscussions(messages);
+
+  return { discussions };
 };

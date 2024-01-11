@@ -1,4 +1,4 @@
-import { VStack, Text } from "@gluestack-ui/themed";
+import { VStack } from "@gluestack-ui/themed";
 
 import { UserSearchBar } from "./components/user-search-bar";
 import { useSearchUsers } from "./hooks/use-search-users";

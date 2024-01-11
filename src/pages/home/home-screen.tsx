@@ -13,11 +13,14 @@ export const HomeScreen = () => {
 
   const currentUser = useCurrentUser();
 
-  const discussions = useDiscussions(currentUser.data?.id);
+  const { discussions } = useDiscussions(currentUser.data?.id);
 
-  const allUserIds = Array.from(discussions?.entries() ?? []).flatMap(
-    ([userId, messages]) => [userId, ...messages.map((m) => m.id)],
-  );
+  const allUserIds = Array.from(discussions?.entries() ?? [])
+    .map(([userId, messages]) => [
+      userId,
+      ...messages.map((m) => [m.from_user_id, m.to_user_id]),
+    ])
+    .flat(2);
   useUsernames(allUserIds);
 
   return (
