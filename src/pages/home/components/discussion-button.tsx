@@ -1,4 +1,4 @@
-import { Text } from "@gluestack-ui/themed";
+import { Text, View } from "@gluestack-ui/themed";
 import { TrashIcon } from "lucide-react-native";
 import { TouchableOpacity } from "react-native";
 
@@ -32,7 +32,7 @@ export const DiscussionButton = ({
     <SwipeableButtons
       buttons={[
         {
-          color: "red",
+          color: "$red600",
           icon: TrashIcon,
           onPress() {
             deleteDiscussion.mutate(userId);
@@ -45,14 +45,18 @@ export const DiscussionButton = ({
           navigation.navigate("discussion", { receiverId: userId });
         }}
       >
-        <Text>{username.data?.name}</Text>
-        <Text>{lastMessage?.message}</Text>
-        {lastMessageDate && (
-          <Text>
-            {lastMessageDate?.getHours().toString().padStart(2, "0")}:
-            {lastMessageDate?.getMinutes().toString().padStart(2, "0")}
+        <View backgroundColor="$background" padding="$3">
+          <Text fontWeight="bold" marginBottom="$1" fontSize="$lg">
+            {username.data?.name}
           </Text>
-        )}
+          <Text>{lastMessage?.message}</Text>
+          {lastMessageDate && (
+            <Text fontSize="$sm" color="gray" fontWeight="$light">
+              {lastMessageDate?.getHours().toString().padStart(2, "0")}:
+              {lastMessageDate?.getMinutes().toString().padStart(2, "0")}
+            </Text>
+          )}
+        </View>
       </TouchableOpacity>
     </SwipeableButtons>
   );

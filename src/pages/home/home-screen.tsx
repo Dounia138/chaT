@@ -1,15 +1,32 @@
-import { Button, ButtonIcon, ButtonText, VStack } from "@gluestack-ui/themed";
+import { Divider, Icon, VStack } from "@gluestack-ui/themed";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MessageCirclePlusIcon } from "lucide-react-native";
+import React, { useEffect } from "react";
+import { TouchableOpacity } from "react-native";
 
 import { DiscussionButton } from "./components/discussion-button";
 import { useUsernames } from "./hooks/use-usernames";
 import { DefaultLayout } from "../../layouts/default-layout";
+import { RootStackParamList } from "../../router/router";
 import { useCurrentUser } from "../../shared/hooks/use-current-user";
 import { useDiscussions } from "../../shared/hooks/use-discussions";
-import { useNavigation } from "../../shared/hooks/use-navigation";
 
-export const HomeScreen = () => {
-  const navigation = useNavigation();
+type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "home">;
+
+export const HomeScreen = ({ navigation }: HomeScreenProps) => {
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight(props) {
+        return (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("newDiscussion")}
+          >
+            <Icon as={MessageCirclePlusIcon} color="$primary500" size="xl" />
+          </TouchableOpacity>
+        );
+      },
+    });
+  }, []);
 
   const currentUser = useCurrentUser();
 
@@ -26,16 +43,6 @@ export const HomeScreen = () => {
   return (
     <DefaultLayout>
       <VStack>
-        <Button
-          variant="solid"
-          onPress={() => {
-            navigation.navigate("newDiscussion");
-          }}
-        >
-          <ButtonIcon as={MessageCirclePlusIcon} marginRight="$3" />
-          <ButtonText>Start a new conversation</ButtonText>
-        </Button>
-
         {Array.from(discussions?.entries() ?? [])
           .sort(([, messagesA], [, messagesB]) => {
             const lastMessageA = messagesA.at(-1);
@@ -50,13 +57,14 @@ export const HomeScreen = () => {
 
             return lastMessageDateB.getTime() - lastMessageDateA.getTime();
           })
-          .map(([userId, messages]) => {
+          .map(([userId, messages], i, arr) => {
             return (
-              <DiscussionButton
-                key={userId}
-                messages={messages}
-                userId={userId}
-              />
+              <React.Fragment key={userId}>
+                <DiscussionButton messages={messages} userId={userId} />
+                {i !== arr.length - 1 && (
+                  <Divider marginTop="$2" marginBottom="$2" />
+                )}
+              </React.Fragment>
             );
           })}
       </VStack>

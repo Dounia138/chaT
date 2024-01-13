@@ -46,9 +46,12 @@ export const NewMessageBox = ({
         <HStack
           justifyContent="space-between"
           alignItems="center"
-          paddingBottom="$3"
+          padding="$3"
+          marginBottom="$3"
+          backgroundColor="$backgroundLight200"
+          rounded="$sm"
         >
-          <Text>Editing</Text>
+          <Text fontSize="$sm">Editing</Text>
           <TouchableOpacity
             onPress={() => {
               setMessageEditing?.(null);

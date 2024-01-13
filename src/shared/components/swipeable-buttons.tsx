@@ -1,7 +1,7 @@
-import { Box, Icon } from "@gluestack-ui/themed";
+import { Box, Icon, View } from "@gluestack-ui/themed";
 import { createLucideIcon } from "lucide-react-native";
 import React from "react";
-import { TouchableOpacity } from "react-native";
+import { Animated, TouchableOpacity } from "react-native";
 import {
   GestureHandlerRootView,
   Swipeable,
@@ -22,29 +22,50 @@ export const SwipeableButtons = ({
   return (
     <GestureHandlerRootView>
       <Swipeable
-        renderRightActions={() => {
-          return buttons.map((button, i) => (
-            <TouchableOpacity
-              key={i}
-              onPress={() => {
-                button.onPress();
-              }}
-            >
-              <Box
-                backgroundColor={button.color}
-                padding="$3"
-                justifyContent="center"
-                alignItems="center"
-                height="100%"
-                aspectRatio={1}
-              >
-                <Icon as={button.icon} color="white" />
-              </Box>
-            </TouchableOpacity>
-          ));
+        renderRightActions={(progress, dragX, swipeable) => {
+          // Utilisez les valeurs progress et dragX pour ajuster l'apparence des éléments à droite
+          const scale = dragX.interpolate({
+            inputRange: [-100, 0],
+            outputRange: [1, 0.5],
+            extrapolate: "clamp",
+          });
+
+          return (
+            <View flexDirection="row">
+              <Box width="$3" />
+              {buttons.map((button, i) => (
+                <Box marginHorizontal="$1" key={i}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      button.onPress();
+                      swipeable.close();
+                    }}
+                  >
+                    <Animated.View
+                      style={{
+                        transform: [{ scale }],
+                      }}
+                    >
+                      <Box
+                        backgroundColor={button.color}
+                        padding="$3"
+                        justifyContent="center"
+                        alignItems="center"
+                        height="100%"
+                        aspectRatio={1}
+                        rounded="$md"
+                      >
+                        <Icon as={button.icon} color="white" />
+                      </Box>
+                    </Animated.View>
+                  </TouchableOpacity>
+                </Box>
+              ))}
+            </View>
+          );
         }}
       >
-        {children}
+        <View backgroundColor="$backgroundLight100">{children}</View>
       </Swipeable>
     </GestureHandlerRootView>
   );

@@ -22,10 +22,12 @@ export const UserSearchBar = ({ onSearch }: UserSearchBarProps) => {
   return (
     <Input variant="outline" size="md">
       <InputField
-        placeholder="Search"
+        placeholder="Enter your friend's email"
         onChangeText={(text) => setSearchTerm(text)}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
-      <InputSlot paddingRight="$1.5">
+      <InputSlot paddingRight="$3">
         <InputIcon as={SearchIcon} />
       </InputSlot>
     </Input>

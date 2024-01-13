@@ -39,6 +39,7 @@ export const DiscussionScreen = ({
           <Message
             key={message.id}
             message={message}
+            messageEditing={messageEditing ?? null}
             setMessageEditing={setMessageEditing}
           />
         ))}
