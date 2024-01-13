@@ -27,8 +27,8 @@ export const getUseUsernameOptions = (userId: string) => {
 export const useUsername = (userId: string) => {
   const useQueryOptions = getUseUsernameOptions(userId);
 
-  return useQuery<any>({
+  return useQuery({
     queryKey: useQueryOptions.queryKey,
-    queryFn: useQueryOptions.queryFn as any,
+    queryFn: useQueryOptions.queryFn,
   });
 };

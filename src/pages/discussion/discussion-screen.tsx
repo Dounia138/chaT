@@ -1,4 +1,4 @@
-import { Box, ScrollView, VStack, View } from "@gluestack-ui/themed";
+import { Box, ScrollView, VStack } from "@gluestack-ui/themed";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 
@@ -36,7 +36,7 @@ export const DiscussionScreen = ({
     <DefaultLayout>
       <VStack height="100%">
         <ScrollView>
-          {(discussion.data as any)?.map((message: any) => (
+          {discussion.data?.map((message) => (
             <Message
               key={message.id}
               message={message}
