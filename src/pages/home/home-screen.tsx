@@ -1,4 +1,4 @@
-import { Divider, Icon, VStack } from "@gluestack-ui/themed";
+import { Divider, Icon, ScrollView, VStack } from "@gluestack-ui/themed";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MessageCirclePlusIcon } from "lucide-react-native";
 import React, { useEffect } from "react";
@@ -42,32 +42,34 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
   return (
     <DefaultLayout>
-      <VStack>
-        {Array.from(discussions?.entries() ?? [])
-          .sort(([, messagesA], [, messagesB]) => {
-            const lastMessageA = messagesA.at(-1);
-            const lastMessageB = messagesB.at(-1);
+      <ScrollView>
+        <VStack>
+          {Array.from(discussions?.entries() ?? [])
+            .sort(([, messagesA], [, messagesB]) => {
+              const lastMessageA = messagesA.at(-1);
+              const lastMessageB = messagesB.at(-1);
 
-            if (!lastMessageA || !lastMessageB) {
-              return 0;
-            }
+              if (!lastMessageA || !lastMessageB) {
+                return 0;
+              }
 
-            const lastMessageDateA = new Date(lastMessageA.created_at);
-            const lastMessageDateB = new Date(lastMessageB.created_at);
+              const lastMessageDateA = new Date(lastMessageA.created_at);
+              const lastMessageDateB = new Date(lastMessageB.created_at);
 
-            return lastMessageDateB.getTime() - lastMessageDateA.getTime();
-          })
-          .map(([userId, messages], i, arr) => {
-            return (
-              <React.Fragment key={userId}>
-                <DiscussionButton messages={messages} userId={userId} />
-                {i !== arr.length - 1 && (
-                  <Divider marginTop="$2" marginBottom="$2" />
-                )}
-              </React.Fragment>
-            );
-          })}
-      </VStack>
+              return lastMessageDateB.getTime() - lastMessageDateA.getTime();
+            })
+            .map(([userId, messages], i, arr) => {
+              return (
+                <React.Fragment key={userId}>
+                  <DiscussionButton messages={messages} userId={userId} />
+                  {i !== arr.length - 1 && (
+                    <Divider marginTop="$2" marginBottom="$2" />
+                  )}
+                </React.Fragment>
+              );
+            })}
+        </VStack>
+      </ScrollView>
     </DefaultLayout>
   );
 };

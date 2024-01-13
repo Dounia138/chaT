@@ -1,4 +1,4 @@
-import { Box, VStack } from "@gluestack-ui/themed";
+import { Box, ScrollView, VStack, View } from "@gluestack-ui/themed";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 
@@ -34,25 +34,27 @@ export const DiscussionScreen = ({
 
   return (
     <DefaultLayout>
-      <VStack>
-        {(discussion.data as any)?.map((message: any) => (
-          <Message
-            key={message.id}
-            message={message}
-            messageEditing={messageEditing ?? null}
+      <VStack height="100%">
+        <ScrollView>
+          {(discussion.data as any)?.map((message: any) => (
+            <Message
+              key={message.id}
+              message={message}
+              messageEditing={messageEditing ?? null}
+              setMessageEditing={setMessageEditing}
+            />
+          ))}
+        </ScrollView>
+        <Box width="100%" marginVertical="$3">
+          <NewMessageBox
+            onSubmit={(message) => {
+              sendMessage.mutate(message);
+            }}
+            messageEditing={messageEditing}
             setMessageEditing={setMessageEditing}
           />
-        ))}
+        </Box>
       </VStack>
-      <Box position="absolute" bottom={0} width="100%" marginBottom="$3">
-        <NewMessageBox
-          onSubmit={(message) => {
-            sendMessage.mutate(message);
-          }}
-          messageEditing={messageEditing}
-          setMessageEditing={setMessageEditing}
-        />
-      </Box>
     </DefaultLayout>
   );
 };

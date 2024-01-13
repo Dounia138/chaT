@@ -1,4 +1,4 @@
-import { Box, Divider, VStack } from "@gluestack-ui/themed";
+import { Box, Divider, ScrollView, VStack } from "@gluestack-ui/themed";
 import React from "react";
 
 import { UserSearchBar } from "./components/user-search-bar";
@@ -17,16 +17,18 @@ export const NewDiscussionScreen = () => {
         />
       </Box>
 
-      <VStack space="md" height="100%">
-        {searchUsers.data?.map((user, i, arr) => (
-          <React.Fragment key={user.id}>
-            <DiscussionButton messages={[]} userId={user.id} />
-            {i !== arr.length - 1 && (
-              <Divider marginTop="$2" marginBottom="$2" />
-            )}
-          </React.Fragment>
-        ))}
-      </VStack>
+      <ScrollView flex={1}>
+        <VStack space="md">
+          {searchUsers.data?.map((user, i, arr) => (
+            <React.Fragment key={user.id}>
+              <DiscussionButton messages={[]} userId={user.id} />
+              {i !== arr.length - 1 && (
+                <Divider marginTop="$2" marginBottom="$2" />
+              )}
+            </React.Fragment>
+          ))}
+        </VStack>
+      </ScrollView>
     </DefaultLayout>
   );
 };

@@ -41,7 +41,7 @@ export const NewMessageBox = ({
   }, [message, messageEditing, setMessageEditing, onSubmit]);
 
   return (
-    <VStack>
+    <VStack backgroundColor="$backgroundLight0" padding="$3" rounded="$md">
       {messageEditing && (
         <HStack
           justifyContent="space-between"

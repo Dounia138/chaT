@@ -15,9 +15,7 @@ export const DefaultLayout = (props: DefaultLayoutProps) => {
       flex={1}
       backgroundColor="$backgroundLight100"
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        {props.children}
-      </ScrollView>
+      {props.children}
     </Box>
   );
 };
