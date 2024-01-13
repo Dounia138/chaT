@@ -1,6 +1,6 @@
 import { Box, VStack } from "@gluestack-ui/themed";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Message } from "./components/message";
 import { NewMessageBox } from "./components/new-message-box";
@@ -30,11 +30,17 @@ export const DiscussionScreen = ({
   const discussion = useDiscussion(receiverId);
   const sendMessage = useSendMessage(receiverId);
 
+  const [messageEditing, setMessageEditing] = useState<number | null>();
+
   return (
     <DefaultLayout>
       <VStack>
         {(discussion.data as any)?.map((message: any) => (
-          <Message key={message.id} message={message} />
+          <Message
+            key={message.id}
+            message={message}
+            setMessageEditing={setMessageEditing}
+          />
         ))}
       </VStack>
       <Box position="absolute" bottom={0} width="100%" marginBottom="$3">
@@ -42,6 +48,8 @@ export const DiscussionScreen = ({
           onSubmit={(message) => {
             sendMessage.mutate(message);
           }}
+          messageEditing={messageEditing}
+          setMessageEditing={setMessageEditing}
         />
       </Box>
     </DefaultLayout>

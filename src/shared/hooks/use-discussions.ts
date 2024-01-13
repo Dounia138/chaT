@@ -7,13 +7,14 @@ import { supabase } from "../utils/supabase/supabase";
 
 const useListenToMessages = (
   userId: string | undefined,
-  // callback: (data: Message) => void,
   {
     callbackInsert,
     callbackDelete,
+    callbackUpdate,
   }: {
     callbackInsert: (data: Message) => void;
     callbackDelete: (data: { id: number }) => void;
+    callbackUpdate: (data: Message) => void;
   },
 ) => {
   useEffect(() => {
@@ -35,6 +36,13 @@ const useListenToMessages = (
         { event: "DELETE", schema: "public", table: "messages" },
         (payload) => {
           callbackDelete(payload.old as { id: number });
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "messages" },
+        (payload) => {
+          callbackUpdate(payload.new as Message);
         },
       )
       .subscribe();
@@ -114,7 +122,8 @@ export const useDiscussions = (userId: string | undefined) => {
       prev: Message[],
       next:
         | { type: "insert"; payload: Message[] }
-        | { type: "delete"; payload: { id: number } },
+        | { type: "delete"; payload: { id: number } }
+        | { type: "edit"; payload: Message[] },
     ) => {
       if (next.type === "insert") {
         return [...prev, ...next.payload].filter(
@@ -125,6 +134,18 @@ export const useDiscussions = (userId: string | undefined) => {
 
       if (next.type === "delete") {
         return prev.filter((message) => message.id !== next.payload.id);
+      }
+
+      if (next.type === "edit") {
+        return prev.map((message) => {
+          const found = next.payload.find((m) => m.id === message.id);
+
+          if (found) {
+            return found;
+          }
+
+          return message;
+        });
       }
 
       return prev;
@@ -163,10 +184,21 @@ export const useDiscussions = (userId: string | undefined) => {
     [dispatchMessages],
   );
 
+  const updateMessage = useCallback(
+    (message: Message) => {
+      dispatchMessages({
+        type: "edit",
+        payload: [message],
+      });
+    },
+    [dispatchMessages],
+  );
+
   // Listen to new messages
   useListenToMessages(userId, {
     callbackInsert: addMessage,
     callbackDelete: deleteMessage,
+    callbackUpdate: updateMessage,
   });
 
   // Group messages to discussions

@@ -9,9 +9,10 @@ import { useDeleteMessage } from "../hooks/use-delete-message";
 
 interface MessageProps {
   message: IMessage;
+  setMessageEditing: (id: number) => void;
 }
 
-export const Message = ({ message }: MessageProps) => {
+export const Message = ({ message, setMessageEditing }: MessageProps) => {
   const currentUser = useCurrentUser();
 
   const senderId = message.from_user_id;
@@ -23,6 +24,22 @@ export const Message = ({ message }: MessageProps) => {
   const textAlign = senderId === currentUser.data?.id ? "right" : "left";
 
   const deleteMessage = useDeleteMessage();
+
+  const renderedMessage = (
+    <View width="100%" flexDirection="row" justifyContent={justifyContent}>
+      <Box width="75%">
+        <Text textAlign={textAlign}>{username.data?.name}</Text>
+        <View backgroundColor="primary" padding="$1" borderRadius="$md">
+          <Text textAlign={textAlign}>{message.message}</Text>
+        </View>
+      </Box>
+    </View>
+  );
+
+  const isMyOwnMessage = senderId === currentUser.data?.id;
+  if (!isMyOwnMessage) {
+    return renderedMessage;
+  }
 
   return (
     <SwipeableButtons
@@ -38,19 +55,12 @@ export const Message = ({ message }: MessageProps) => {
           color: "blue",
           icon: EditIcon,
           onPress() {
-            console.log("edit");
+            setMessageEditing(message.id);
           },
         },
       ]}
     >
-      <View width="100%" flexDirection="row" justifyContent={justifyContent}>
-        <Box width="75%">
-          <Text textAlign={textAlign}>{username.data?.name}</Text>
-          <View backgroundColor="primary" padding="$1" borderRadius="$md">
-            <Text textAlign={textAlign}>{message.message}</Text>
-          </View>
-        </Box>
-      </View>
+      {renderedMessage}
     </SwipeableButtons>
   );
 };
