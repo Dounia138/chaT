@@ -96,6 +96,7 @@ export const useMessages = (userId: string | undefined) => {
   return useQuery({
     enabled: !!userId,
     queryKey: ["messages", userId],
+    staleTime: 0,
     queryFn: async () => {
       if (!userId) {
         throw new Error("User id is not defined");
@@ -108,15 +109,6 @@ export const useMessages = (userId: string | undefined) => {
 
 export const useDiscussions = (userId: string | undefined) => {
   // Create a store of messages
-  // const [messages, setMessages] = useReducer(
-  //   (prev: Message[], next: Message[]) => {
-  //     return [...prev, ...next].filter(
-  //       (message, index, self) =>
-  //         index === self.findIndex((m) => m.id === message.id),
-  //     );
-  //   },
-  //   [],
-  // );
   const [messages, dispatchMessages] = useReducer(
     (
       prev: Message[],
