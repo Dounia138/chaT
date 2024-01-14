@@ -1,32 +1,32 @@
-This is a [Next.js](https://github.com/expo/expo) + [Gluestack-ui](https://ui.gluestack.io/) project template bootstrapped with [`create-expo-app`](https://docs.expo.dev/get-started/create-a-project/).
+<p align="center">
+  <img src="./docs/assets/cat.jpg" width="300" height="300" />
+</p>
 
-## Getting Started
+# ChaT
 
-First, run the development server:
+## Setup
 
-```bash
-# For web
-yarn web
-# For ios
-yarn ios
-# For android
-yarn android
-```
+1. Install [Node.js](https://nodejs.org/en/download/) (v18.0.0 or higher)
+2. Clone this repository
+3. Copy `.env.example` to `.env` and fill in the values
+4. Run `npm install` to install dependencies
+5. Run `npm run start` to start the development server
 
-You can start editing the page by modifying `App.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`@gluestack-ui`](https://ui.gluestack.io/docs/overview/introduction) library that provides optionally styled and accessible components. These components are designed for easy integration into applications developed with React and React Native.
+- [x] Authentication
+- [x] Real-time chat
+- [x] Offline support
+- [x] Create, edit and delete messages
+- [x] Delete entire conversations
+- [x] Search for users by email
 
+## Technologies
 
-## Learn More
-
-To learn more about Expo + Gluestack UI template, take a look at the following resources:
-
-- [Expo Documentation](https://github.com/expo/expo) - learn about Expo features and API.
-- [Gluestack UI Documenatation](https://ui.gluestack.io/docs/overview/introduction) - learn about core concepts and architecture of gluestack-ui.
-- [Gluestack Style Documentaion](https://style.gluestack.io/docs/overview/introduction) - learn about the universal styling library that is used in Gluestack-ui
-
-You can check out:
-- [the gluestack-ui GitHub repository](https://github.com/gluestack/gluestack-ui)
-- [the gluestack-style GitHub repository](https://github.com/gluestack/gluestack-style)
-Your feedback and contributions are welcome!
+- [React](https://reactjs.org/)
+- [React Native](https://reactnative.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Expo](https://expo.dev/)
+- [Supabase](https://supabase.io/)
+- [React Navigation](https://reactnavigation.org/)
+- others...
